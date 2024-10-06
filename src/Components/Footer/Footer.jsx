@@ -1,26 +1,41 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import './Footer.css'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import './Footer.css';
 import footer_logo from '../../assets/Dave\'s logo.png';
-import user_icon from '../../assets/user_icon.svg'
+import user_icon from '../../assets/user_icon.svg';
+import ChartComponent from '../Chart/ChartComponent';
 
 const Footer = () => {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('');
+  const [subscriptionStatus, setSubscriptionStatus] = useState('');
 
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    // Add your subscription logic here
-    console.log('Subscribed with email:', email)
-    // Reset email field after submission
-    setEmail('')
-  }
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('https://api.example.com/subscribe', { email });
+      setSubscriptionStatus(response.data.message);
+      setEmail('');
+    } catch (error) {
+      setSubscriptionStatus('Subscription failed. Please try again.');
+    }
+  };
+
+  const subscriptionData = [
+    { name: 'Jan', value: 400 },
+    { name: 'Feb', value: 300 },
+    { name: 'Mar', value: 200 },
+    { name: 'Apr', value: 278 },
+    { name: 'May', value: 189 },
+  ];
 
   return (
     <footer className='footer'>
       <div className="footer-top">
         <div className="footer-top-left">
-        <img src={footer_logo} alt="Dave's logo" />
+          <img src={footer_logo} alt="Dave's logo" className="logo" />
           <p>I am a frontend developer from Australia with 2 years of experience in companies like Amazon, Google and Department of Transport, NSW.</p>
+          <ChartComponent data={subscriptionData} />
         </div>
         <div className="footer-top-right">
           <form onSubmit={handleSubscribe} className="footer-email-input">
@@ -35,6 +50,7 @@ const Footer = () => {
             />
             <button type="submit" className="footer-subscribe">Subscribe</button>
           </form>
+          {subscriptionStatus && <p>{subscriptionStatus}</p>}
         </div>
       </div>
       <hr />
@@ -47,7 +63,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

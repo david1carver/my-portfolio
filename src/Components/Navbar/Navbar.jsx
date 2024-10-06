@@ -1,44 +1,62 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import './Navbar.css'
+import './Navbar.css';
 import logo from '../../assets/Dave\'s logo.png';
-import underline from '../../assets/nav_underline.svg'
-import menu_open from '../../assets/menu_open.svg'
-import menu_close from '../../assets/menu_close.svg'
+import underline from '../../assets/nav_underline.svg';
+import menu_open from '../../assets/menu_open.svg';
+import menu_close from '../../assets/menu_close.svg';
 
 const Navbar = () => {
   const location = useLocation();
   const [menu, setMenu] = useState("/");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef();
 
   useEffect(() => {
     setMenu(location.pathname);
   }, [location]);
 
-  const openMenu = () => {
-    menuRef.current.style.right = "0";
-  }
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    menuRef.current.style.right = isMenuOpen ? "-300px" : "0";
+  };
 
   const closeMenu = () => {
+    setIsMenuOpen(false);
     menuRef.current.style.right = "-300px";
-  }
+  };
 
   return (
-    <div className='navbar'>
+    <nav className='navbar'>
       <img src={logo} alt="Dave's logo" className='logo'/>
-      <img src={menu_open} onClick={openMenu} alt="" className='nav-mob-open' />
-      <ul ref={menuRef} className="nav-menu">
-        <img src={menu_close} onClick={closeMenu} alt="" className="nav-mob-close" />
-        <li><Link to="/" className='anchor-link'><p>Home</p></Link>{menu === "/" && <img src={underline} alt=''/>}</li>
-        <li><Link to="/about" className='anchor-link'><p>About Me</p></Link>{menu === "/about" && <img src={underline} alt=''/>}</li>
-        <li><Link to="/services" className='anchor-link'><p>Services</p></Link>{menu === "/services" && <img src={underline} alt=''/>}</li>
-        <li><Link to="/resume" className='anchor-link'><p>Resume</p></Link>{menu === "/resume" && <img src={underline} alt=''/>}</li>
-        <li><Link to="/portfolio" className='anchor-link'><p>Portfolio</p></Link>{menu === "/portfolio" && <img src={underline} alt=''/>}</li>
-        <li><Link to="/contact" className='anchor-link'><p>Contact</p></Link>{menu === "/contact" && <img src={underline} alt=''/>}</li>
+      <button onClick={toggleMenu} className='nav-mob-open' aria-label="Open menu">
+        <img src={menu_open} alt="" />
+      </button>
+      <ul ref={menuRef} className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
+        <button onClick={closeMenu} className="nav-mob-close" aria-label="Close menu">
+          <img src={menu_close} alt="" />
+        </button>
+        {[
+          { path: "/", text: "Home" },
+          { path: "/about", text: "About Me" },
+          { path: "/services", text: "Services" },
+          { path: "/resume", text: "Resume" },
+          { path: "/portfolio", text: "Portfolio" },
+          { path: "/contact", text: "Contact" },
+        ].map((item) => (
+          <li key={item.path}>
+            <Link to={item.path} className='anchor-link' onClick={closeMenu}>
+              <p>{item.text}</p>
+              {menu === item.path && <img src={underline} alt='' />}
+            </Link>
+          </li>
+        ))}
       </ul>
-      <div className="nav-connect"><Link to="/contact" className='anchor-link'>Connect With Me</Link></div>
-    </div>
-  )
-}
+      <div className="nav-connect">
+        <Link to="/contact" className='anchor-link'>Connect With Me</Link>
+      </div>
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;

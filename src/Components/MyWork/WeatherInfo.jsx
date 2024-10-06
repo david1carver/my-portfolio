@@ -4,15 +4,17 @@ import axios from 'axios';
 const WeatherInfo = () => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchWeather = async (latitude, longitude) => {
       try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=YOUR_OPENWEATHERMAP_API_KEY`);
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`);
         setWeather(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching weather:', error);
+        setError('Failed to load weather information. Please try again later.');
         setLoading(false);
       }
     };
@@ -24,17 +26,22 @@ const WeatherInfo = () => {
         },
         (error) => {
           console.error('Error getting location:', error);
-          setLoading(false);
+          // Fallback to a default location (e.g., Sydney)
+          fetchWeather(-33.8688, 151.2093);
         }
       );
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      setError('Geolocation is not supported by this browser.');
       setLoading(false);
     }
   }, []);
 
   if (loading) {
-    return <div>Loading weather information...</div>;
+    return <div className="loading-spinner">Loading weather information...</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
   }
 
   if (!weather) {

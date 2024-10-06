@@ -11,20 +11,26 @@ const ProjectSearch = ({ onSearch }) => {
 
   return (
     <form onSubmit={handleSubmit} className="project-search">
+      <label htmlFor="search-input">Search projects:</label>
       <input
+        id="search-input"
         type="text"
-        placeholder="Search projects"
+        placeholder="Enter search term"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        aria-label="Search projects"
       />
+      <label htmlFor="search-type">Search by:</label>
       <select
+        id="search-type"
         value={searchType}
         onChange={(e) => setSearchType(e.target.value)}
+        aria-label="Search type"
       >
-        <option value="name">By Name</option>
-        <option value="technology">By Technology</option>
+        <option value="name">Name</option>
+        <option value="technology">Technology</option>
       </select>
-      <button type="submit">Search</button>
+      <button type="submit" aria-label="Submit search">Search</button>
     </form>
   );
 };

@@ -5,6 +5,7 @@ import './MyWork.css';
 import theme_pattern from '../../assets/theme_pattern.svg';
 import ProjectSearch from './ProjectSearch';
 import WeatherInfo from './WeatherInfo';
+import ChartComponent from '../Chart/ChartComponent';
 
 const MyWork = () => {
   const [projects, setProjects] = useState([]);

@@ -1,9 +1,23 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './Resume.css';
 import theme_pattern from '../../assets/theme_pattern.svg';
 
 const Resume = () => {
+  const skillsData = useMemo(() => [
+    { name: 'React.js', level: 90 },
+    { name: 'JavaScript', level: 85 },
+    { name: 'HTML5 & CSS3', level: 95 },
+    { name: 'Responsive Design', level: 80 },
+    { name: 'Git', level: 75 },
+    { name: 'RESTful APIs', level: 70 },
+  ], []);
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className='resume'>
       <div className="title-box">
@@ -36,7 +50,7 @@ const Resume = () => {
           </ul>
         </div>
         <div className="job">
-          <h3>Hospital Scientist Grade 3 - Garvan Institue of Medical Research</h3>
+          <h3>Hospital Scientist Grade 3 - Garvan Institute of Medical Research</h3>
           <p className="date">2017 - 2019</p>
           <ul>
             <li>Conducted advanced genomic research, focusing on identifying novel genetic variants associated with complex diseases</li>
@@ -60,14 +74,19 @@ const Resume = () => {
 
       <section className="skills">
         <h2>Skills</h2>
-        <ul>
-          <li>React.js</li>
-          <li>JavaScript (ES6+)</li>
-          <li>HTML5 & CSS3</li>
-          <li>Responsive Web Design</li>
-          <li>Git & Version Control</li>
-          <li>RESTful APIs</li>
-        </ul>
+        {skillsData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={skillsData} aria-label="Skills Chart">
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="level" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>Skills data is currently unavailable.</p>
+        )}
       </section>
 
       <section className="publications">
@@ -81,15 +100,20 @@ const Resume = () => {
       <section className="qualifications">
         <h2>Qualifications</h2>
         <ul>
-          <li>Bachelor of Biomedical Science (Laboratory Medicine)- RMIT, 2013</li>
+          <li>Bachelor of Biomedical Science (Laboratory Medicine) - RMIT, 2013</li>
           <li>Graduate Certificate in Cyber Security - EUC, 2022</li>
           <li>Graduate Diploma in IT (Computer Science) - QUT, 2024</li>
           <li>Frontend Web Development Certification - CodeAcademy, 2020</li>
           <li>Software Engineering Certification - Coursera, 2021</li>
           <li>CCNA, Dec 2023</li>
-          <li>Comptia Security+, May 2024</li>
+          <li>CompTIA Security+, May 2024</li>
         </ul>
       </section>
+
+      <div className="resume-actions">
+        <Link to="/portfolio" className="back-to-portfolio">Back to Portfolio</Link>
+        <button onClick={handlePrint} className="print-resume">Print Resume</button>
+      </div>
     </div>
   );
 };

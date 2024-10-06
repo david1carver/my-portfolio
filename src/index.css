@@ -7,7 +7,7 @@
 body {
   min-height: 100vh;
   background: #161513;
-  color: white;
+  color: rgb(200, 124, 124);
   font-family: 'outfit', sans-serif;
 }
 
@@ -29,7 +29,6 @@ body {
   z-index: -1;
 }
 
-/* New styles for ProjectSearch component */
 .project-search {
   margin-bottom: 20px;
   display: flex;
@@ -55,7 +54,6 @@ body {
   cursor: pointer;
 }
 
-/* New styles for WeatherInfo component */
 .weather-info {
   background-color: rgba(255, 255, 255, 0.1);
   padding: 15px;
@@ -67,7 +65,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* New styles for ProjectDetail component */
 .project-detail {
   padding: 20px;
 }
@@ -91,7 +88,7 @@ body {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #DF8908;
-  color: white;
+  color: rgb(170, 92, 92);
   text-decoration: none;
   border-radius: 5px;
 }
@@ -112,7 +109,6 @@ body {
     right: -40px;
   }
 
-  /* Responsive styles for new components */
   .project-search {
     flex-direction: column;
   }

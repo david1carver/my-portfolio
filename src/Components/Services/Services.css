@@ -72,6 +72,17 @@
     transform: scale(1.05);
 }
 
+/* New styles for the chart */
+.recharts-wrapper {
+    margin: 2rem auto;
+    max-width: 100%;
+}
+
+.recharts-default-tooltip {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid #ccc !important;
+}
+
 @media (max-width: 768px) {
     .services {
         align-items: flex-start;
@@ -96,5 +107,9 @@
     .services-container {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.25rem;
+    }
+
+    .recharts-wrapper {
+        font-size: 12px;
     }
 }
