@@ -11,6 +11,8 @@ const MyWork = lazy(() => import('./Components/MyWork/MyWork'));
 const ProjectDetail = lazy(() => import('./Components/MyWork/ProjectDetail'));
 const Contact = lazy(() => import('./Components/Contact/Contact'));
 const Resume = lazy(() => import('./Components/Resume/Resume'));
+const Terms = lazy(() => import('./Components/Terms/Terms'));
+const Privacy = lazy(() => import('./Components/Privacy/Privacy'));
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
               <Route path="/portfolio" element={<MyWork />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="*" element={<div>Page not found</div>} />
             </Routes>
           </Suspense>

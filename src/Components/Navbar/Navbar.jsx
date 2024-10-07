@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 import logo from '../../assets/Dave\'s logo.png';
@@ -17,14 +17,21 @@ const Navbar = () => {
   }, [location]);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    menuRef.current.style.right = isMenuOpen ? "-300px" : "0";
+    setIsMenuOpen(prevState => !prevState);
   };
 
   const closeMenu = () => {
     setIsMenuOpen(false);
-    menuRef.current.style.right = "-300px";
   };
+
+  const menuItems = useMemo(() => [
+    { path: "/", text: "Home" },
+    { path: "/about", text: "About Me" },
+    { path: "/services", text: "Services" },
+    { path: "/resume", text: "Resume" },
+    { path: "/portfolio", text: "Portfolio" },
+    { path: "/contact", text: "Contact" },
+  ], []);
 
   return (
     <nav className='navbar'>
@@ -36,18 +43,15 @@ const Navbar = () => {
         <button onClick={closeMenu} className="nav-mob-close" aria-label="Close menu">
           <img src={menu_close} alt="" />
         </button>
-        {[
-          { path: "/", text: "Home" },
-          { path: "/about", text: "About Me" },
-          { path: "/services", text: "Services" },
-          { path: "/resume", text: "Resume" },
-          { path: "/portfolio", text: "Portfolio" },
-          { path: "/contact", text: "Contact" },
-        ].map((item) => (
+        {menuItems.map((item) => (
           <li key={item.path}>
-            <Link to={item.path} className='anchor-link' onClick={closeMenu}>
+            <Link 
+              to={item.path} 
+              className={`anchor-link ${menu === item.path ? 'active' : ''}`} 
+              onClick={closeMenu}
+            >
               <p>{item.text}</p>
-              {menu === item.path && <img src={underline} alt='' />}
+              {menu === item.path && <img src={underline} alt='' className="nav-underline" />}
             </Link>
           </li>
         ))}

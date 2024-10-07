@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './Footer.css';
@@ -10,24 +10,25 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
 
-  const handleSubscribe = async (e) => {
+  const handleSubscribe = useCallback(async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://api.example.com/subscribe', { email });
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/subscribe`, { email });
       setSubscriptionStatus(response.data.message);
       setEmail('');
     } catch (error) {
       setSubscriptionStatus('Subscription failed. Please try again.');
+      console.error('Subscription error:', error);
     }
-  };
+  }, [email]);
 
-  const subscriptionData = [
+  const subscriptionData = useMemo(() => [
     { name: 'Jan', value: 400 },
     { name: 'Feb', value: 300 },
     { name: 'Mar', value: 200 },
     { name: 'Apr', value: 278 },
     { name: 'May', value: 189 },
-  ];
+  ], []);
 
   return (
     <footer className='footer'>
@@ -39,7 +40,7 @@ const Footer = () => {
         </div>
         <div className="footer-top-right">
           <form onSubmit={handleSubscribe} className="footer-email-input">
-            <img src={user_icon} alt="User Icon" />
+            <img src={user_icon} alt="" />
             <input 
               type="email" 
               placeholder='Enter your email' 
@@ -50,17 +51,17 @@ const Footer = () => {
             />
             <button type="submit" className="footer-subscribe">Subscribe</button>
           </form>
-          {subscriptionStatus && <p>{subscriptionStatus}</p>}
+          {subscriptionStatus && <p role="alert" aria-live="polite">{subscriptionStatus}</p>}
         </div>
       </div>
       <hr />
       <div className="footer-bottom">
-        <p className="footer-bottom-left">&copy; 2024 David Carver. All rights reserved.</p>
-        <div className="footer-bottom-right">
+        <p className="footer-bottom-left">&copy; {new Date().getFullYear()} David Carver. All rights reserved.</p>
+        <nav className="footer-bottom-right">
           <Link to="/terms">Terms of Service</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/contact">Connect with me</Link>
-        </div>
+        </nav>
       </div>
     </footer>
   );

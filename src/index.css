@@ -65,6 +65,14 @@ body {
   margin-bottom: 10px;
 }
 
+.weather-info.loading {
+  color: #888;
+}
+
+.weather-info.error {
+  color: #ff6b6b;
+}
+
 .project-detail {
   padding: 20px;
 }
@@ -117,5 +125,16 @@ body {
   .project-search select,
   .project-search button {
     width: 100%;
+  }
+  .close-button {
+    background-color: white;
+    border: 1px solid #333;
+    color: #333;
+    padding: 5px;
+    font-weight: bold;
+  }
+  
+  .close-button:hover {
+    background-color: #f0f0f0;
   }
 }

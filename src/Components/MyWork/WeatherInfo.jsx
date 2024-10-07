@@ -6,19 +6,23 @@ const WeatherInfo = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchWeather = async (latitude, longitude) => {
-      try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`);
-        setWeather(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching weather:', error);
-        setError('Failed to load weather information. Please try again later.');
-        setLoading(false);
-      }
-    };
+  const fetchWeather = async (latitude, longitude) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_OPENWEATHERMAP_API_KEY}`
+      );
+      setWeather(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching weather:', error);
+      setError(`Failed to load weather information: ${error.message}`);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -26,8 +30,8 @@ const WeatherInfo = () => {
         },
         (error) => {
           console.error('Error getting location:', error);
-          // Fallback to a default location (e.g., Sydney)
-          fetchWeather(-33.8688, 151.2093);
+          setError(`Unable to get your location: ${error.message}`);
+          setLoading(false);
         }
       );
     } else {
@@ -36,12 +40,34 @@ const WeatherInfo = () => {
     }
   }, []);
 
+  const handleRetry = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          fetchWeather(position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          setError(`Unable to get your location: ${error.message}`);
+          setLoading(false);
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by this browser.');
+      setLoading(false);
+    }
+  };
+
   if (loading) {
-    return <div className="loading-spinner">Loading weather information...</div>;
+    return <div className="weather-info loading">Loading weather information...</div>;
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="weather-info error">
+        <p>{error}</p>
+        <button onClick={handleRetry}>Retry</button>
+      </div>
+    );
   }
 
   if (!weather) {
